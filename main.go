@@ -3,6 +3,7 @@ package main
 import (
 	"errors"
 	"github.com/JumpSama/aug-blog/config"
+	"github.com/JumpSama/aug-blog/model"
 	"github.com/JumpSama/aug-blog/router"
 	"github.com/gin-gonic/gin"
 	"github.com/lexkong/log"
@@ -34,10 +35,16 @@ func pingServer() error {
 func main() {
 	pflag.Parse()
 
+	// init log
 	if err := config.Init(*cfg); err != nil {
 		panic(err)
 	}
 
+	// init database
+	model.DB.Init()
+	defer model.DB.Close()
+
+	// set gin mode
 	gin.SetMode(viper.GetString("runmode"))
 
 	g := gin.New()

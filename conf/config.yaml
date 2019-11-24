@@ -3,12 +3,19 @@ addr: :8080
 name: aug-blog
 url: http://127.0.0.1:8080
 max_ping_count: 10
+gormlog: true
 log:
   writers: file,stdout
   logger_level: DEBUG
   logger_file: log/augblog.log
   log_format_text: false
-  rollingPolicy: size
+  rollingPolicy: daily
   log_rotate_date: 1
-  log_rotate_size: 1024
+  log_rotate_size: 10
   log_backup_count: 7
+db:
+  name: aug_blog
+  addr: 127.0.0.1:3306
+  username: root
+  password:
+  timezone: Asia/Shanghai
