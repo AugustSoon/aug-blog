@@ -50,7 +50,7 @@ func GetUserList(req *ListRequest) (list []*UserInfo, count int) {
 	count = 0
 	list = make([]*UserInfo, 0)
 
-	sql := DB.Self.Model(&UserModel{})
+	sql := DB.Self.Table("user_models")
 
 	if req.Account != "" {
 		sql = sql.Where("account like ?", "%"+req.Account+"%")
@@ -60,8 +60,7 @@ func GetUserList(req *ListRequest) (list []*UserInfo, count int) {
 		sql = sql.Where("username like ?", "%"+req.Username+"%")
 	}
 
-	sql.Count(&count)
-	sql.Offset(req.Offset).Limit(req.Limit).Order("id desc").Find(&list)
+	sql.Count(&count).Offset(req.Offset).Limit(req.Limit).Order("id desc").Find(&list)
 
 	return
 }

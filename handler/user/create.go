@@ -15,7 +15,7 @@ func Create(c *gin.Context) {
 
 	var r CreateRequest
 
-	if err := c.Bind(&r); err != nil {
+	if err := c.ShouldBindJSON(&r); err != nil {
 		SendResponseErrorParams(c)
 		return
 	}

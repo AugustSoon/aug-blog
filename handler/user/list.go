@@ -9,7 +9,7 @@ import (
 func List(c *gin.Context) {
 	var r model.ListRequest
 
-	if err := c.Bind(&r); err != nil {
+	if err := c.ShouldBindJSON(&r); err != nil {
 		SendResponseErrorParams(c)
 		return
 	}
