@@ -14,7 +14,7 @@ import (
 func Update(c *gin.Context) {
 	log.Infof("Update function called.", lager.Data{"X-Request-Id": util.GetReqID(c)})
 
-	var u model.UserModel
+	var u model.User
 
 	if err := c.Bind(&u); err != nil {
 		SendResponseErrorParams(c)
@@ -23,6 +23,13 @@ func Update(c *gin.Context) {
 	userId, _ := strconv.Atoi(c.Param("id"))
 
 	u.ID = uint(userId)
+
+	count := model.GetUserCountByAccount(u.Account, u.ID)
+
+	if count > 0 {
+		SendResponse(c, errno.ErrUserExist, nil)
+		return
+	}
 
 	if err := u.Validate(); err != nil {
 		SendResponseErrorValidation(c)

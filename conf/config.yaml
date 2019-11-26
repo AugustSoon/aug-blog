@@ -19,3 +19,4 @@ db:
   username: root
   password:
   timezone: Asia/Shanghai
+  charset: utf8mb4

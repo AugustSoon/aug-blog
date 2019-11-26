@@ -13,21 +13,22 @@ import (
 func Create(c *gin.Context) {
 	log.Infof("User Create function called.", lager.Data{"X-Request-Id": util.GetReqID(c)})
 
-	var r CreateRequest
+	var u model.User
 
-	if err := c.ShouldBindJSON(&r); err != nil {
+	if err := c.ShouldBindJSON(&u); err != nil {
 		SendResponseErrorParams(c)
 		return
 	}
 
-	u := model.UserModel{
-		Account:  r.Account,
-		Username: r.Username,
-		Password: r.Password,
+	count := model.GetUserCountByAccount(u.Account, 0)
+
+	if count > 0 {
+		SendResponse(c, errno.ErrUserExist, nil)
+		return
 	}
 
-	if err := u.Validate(); err != nil {
-		SendResponse(c, errno.ErrValidation, nil)
+	if err := u.Encrypt(); err != nil {
+		SendResponse(c, errno.ErrEncrypt, nil)
 		return
 	}
 

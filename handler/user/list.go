@@ -3,6 +3,7 @@ package user
 import (
 	. "github.com/JumpSama/aug-blog/handler"
 	"github.com/JumpSama/aug-blog/model"
+	"github.com/JumpSama/aug-blog/service"
 	"github.com/gin-gonic/gin"
 )
 
@@ -14,7 +15,7 @@ func List(c *gin.Context) {
 		return
 	}
 
-	list, count := model.GetUserList(&r)
+	list, count := service.UserList(&r)
 
 	SendResponse(c, nil, ListResponse{
 		Total: count,

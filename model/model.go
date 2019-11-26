@@ -1,18 +1,12 @@
 package model
 
-type UserInfo struct {
-	Id        uint   `json:"id"`
-	Username  string `json:"username"`
-	SayHello  string `json:"sayHello"`
-	Password  string `json:"password"`
-	CreatedAt string `json:"createdAt"`
-	UpdatedAt string `json:"updatedAt"`
-}
+import "time"
 
-//type UserList struct {
-//	Lock  *sync.Mutex
-//	IdMap map[uint]*UserInfo
-//}
+type BaseModel struct {
+	ID        uint `gorm:"primary_key"`
+	CreatedAt time.Time
+	UpdatedAt time.Time
+}
 
 type Token struct {
 	Token string `json:"token"`

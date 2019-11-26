@@ -29,6 +29,7 @@ func pingServer() error {
 		log.Info("Waiting for the router, retry in 1 second.")
 		time.Sleep(time.Second)
 	}
+
 	return errors.New("Cannot connect to the router.")
 }
 

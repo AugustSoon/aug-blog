@@ -15,8 +15,8 @@ type Database struct {
 
 var DB *Database
 
-func openDB(username, password, addr, name, timezone string) *gorm.DB {
-	config := fmt.Sprintf("%s:%s@tcp(%s)/%s?charset=utf8&parseTime=%t&loc=%s", username, password, addr, name, true, url.QueryEscape(timezone))
+func openDB(username, password, addr, name, charset, timezone string) *gorm.DB {
+	config := fmt.Sprintf("%s:%s@tcp(%s)/%s?charset=%s&parseTime=%t&loc=%s", username, password, addr, name, charset, true, url.QueryEscape(timezone))
 
 	db, err := gorm.Open("mysql", config)
 
@@ -30,13 +30,11 @@ func openDB(username, password, addr, name, timezone string) *gorm.DB {
 }
 
 func setupDB(db *gorm.DB) {
-	// 引擎
-	db.Set("gorm:table_options", "ENGINE=InnoDB")
-	// 迁移
-	db.AutoMigrate(&UserModel{})
+	// 引擎 && 迁移
+	db.Set("gorm:table_options", "ENGINE=InnoDB").AutoMigrate(&User{})
 	// 日志模式
 	db.LogMode(viper.GetBool("gormlog"))
-
+	// 不保留空闲连接
 	db.DB().SetMaxIdleConns(0)
 }
 
@@ -45,6 +43,7 @@ func InitSelfDB() *gorm.DB {
 		viper.GetString("db.password"),
 		viper.GetString("db.addr"),
 		viper.GetString("db.name"),
+		viper.GetString("db.charset"),
 		viper.GetString("db.timezone"))
 }
 

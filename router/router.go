@@ -11,6 +11,7 @@ import (
 func Load(g *gin.Engine, mw ...gin.HandlerFunc) *gin.Engine {
 	// 中间件
 	g.Use(gin.Recovery())
+	g.Use(gin.Logger())
 	g.Use(middleware.NoCache)
 	g.Use(middleware.Options)
 	g.Use(middleware.Secure)
@@ -21,6 +22,7 @@ func Load(g *gin.Engine, mw ...gin.HandlerFunc) *gin.Engine {
 		c.String(http.StatusNotFound, "The incorrect API route.")
 	})
 
+	// 用户
 	u := g.Group("/v1/user")
 	{
 		u.POST("", user.Create)
@@ -30,6 +32,7 @@ func Load(g *gin.Engine, mw ...gin.HandlerFunc) *gin.Engine {
 		u.PUT("/:id", user.Update)
 	}
 
+	// 服务状态
 	scvd := g.Group("/sd")
 	{
 		scvd.GET("/health", sd.HealthCheck)
