@@ -50,9 +50,7 @@ func main() {
 
 	g := gin.New()
 
-	middlewares := []gin.HandlerFunc{}
-
-	router.Load(g, middlewares...)
+	router.Load(g)
 
 	go func() {
 		if err := pingServer(); err != nil {

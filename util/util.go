@@ -1,14 +1,13 @@
 package util
 
 import (
-	"fmt"
 	"github.com/gin-gonic/gin"
 	"github.com/satori/go.uuid"
 )
 
 func GetUUID() string {
 	id := uuid.NewV4()
-	return fmt.Sprintf("%s", id)
+	return id.String()
 }
 
 func GetReqID(c *gin.Context) string {
