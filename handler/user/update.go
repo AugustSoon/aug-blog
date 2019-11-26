@@ -20,11 +20,10 @@ func Update(c *gin.Context) {
 		SendResponseErrorParams(c)
 	}
 
-	userId, _ := strconv.Atoi(c.Param("id"))
+	id, _ := strconv.Atoi(c.Param("id"))
+	userId := uint(id)
 
-	u.ID = uint(userId)
-
-	count := model.GetUserCountByAccount(u.Account, u.ID)
+	count := model.GetUserCountByAccount(u.Account, userId)
 
 	if count > 0 {
 		SendResponse(c, errno.ErrUserExist, nil)
@@ -36,12 +35,17 @@ func Update(c *gin.Context) {
 		return
 	}
 
-	if err := u.Encrypt(); err != nil {
-		SendResponse(c, errno.ErrEncrypt, nil)
-		return
+	if u.Password != "" {
+		if err := u.Encrypt(); err != nil {
+			SendResponse(c, errno.ErrEncrypt, nil)
+			return
+		}
 	}
 
-	if err := u.Update(); err != nil {
+	var user model.User
+	user.ID = userId
+
+	if err := user.Update(&u); err != nil {
 		SendResponseErrorDatabase(c)
 		return
 	}

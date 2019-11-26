@@ -13,7 +13,7 @@ type User struct {
 	gorm.Model
 	Account  string `gorm:"size:20;not null;unique" json:"account" binding:"required" validate:"min=5,max=20"`
 	Username string `gorm:"size:20;not null" json:"username" binding:"required" validate:"min=1,max=20"`
-	Password string `gorm:"not null" json:"password" binding:"required" validate:"min=5,max=255"`
+	Password string `gorm:"not null" json:"password" validate:"max=20"`
 	Status   bool   `gorm:"not null;default:true" json:"status"`
 }
 
@@ -53,8 +53,8 @@ func DeleteUser(id uint) error {
 }
 
 // 更新用户
-func (u *User) Update() error {
-	return DB.Self.Save(&u).Error
+func (u *User) Update(user *User) error {
+	return DB.Self.Model(&u).Updates(user).Error
 }
 
 // 通过账号获取用户

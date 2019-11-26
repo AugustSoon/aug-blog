@@ -3,6 +3,7 @@ package user
 import (
 	. "github.com/JumpSama/aug-blog/handler"
 	"github.com/JumpSama/aug-blog/model"
+	"github.com/JumpSama/aug-blog/pkg/constvar"
 	"github.com/JumpSama/aug-blog/pkg/errno"
 	"github.com/JumpSama/aug-blog/util"
 	"github.com/gin-gonic/gin"
@@ -24,6 +25,15 @@ func Create(c *gin.Context) {
 
 	if count > 0 {
 		SendResponse(c, errno.ErrUserExist, nil)
+		return
+	}
+
+	if u.Password == "" {
+		u.Password = constvar.DefaultPassword
+	}
+
+	if err := u.Validate(); err != nil {
+		SendResponseErrorValidation(c)
 		return
 	}
 
