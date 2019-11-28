@@ -4,6 +4,8 @@ name: aug-blog
 url: http://127.0.0.1:8080
 max_ping_count: 10
 gormlog: true
+jwt_ttl: 43200
+jwt_secret: 0ep7Q1nRmShGbgJ6udBkGFRGkj7MHgAe
 log:
   writers: file,stdout
   logger_level: DEBUG
