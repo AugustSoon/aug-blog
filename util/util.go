@@ -1,6 +1,7 @@
 package util
 
 import (
+	"github.com/JumpSama/aug-blog/pkg/constvar"
 	"github.com/gin-gonic/gin"
 	"github.com/satori/go.uuid"
 )
@@ -22,4 +23,10 @@ func GetReqID(c *gin.Context) string {
 	}
 
 	return ""
+}
+
+func GetLoginUserId(c *gin.Context) uint {
+	v := c.GetInt(constvar.LoginUserIdKey)
+
+	return uint(v)
 }

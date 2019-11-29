@@ -59,7 +59,8 @@ func Logging() gin.HandlerFunc {
 		end := time.Now().UTC()
 		latency := end.Sub(start)
 
-		code, message := -1, ""
+		var code int
+		var message string
 
 		var response handler.Response
 

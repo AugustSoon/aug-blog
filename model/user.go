@@ -17,6 +17,12 @@ type User struct {
 	Status   bool   `gorm:"not null;default:true" json:"status"`
 }
 
+// 登录字段
+type UserLogin struct {
+	Account  string `json:"account" binding:"required"`
+	Password string `json:"password" binding:"required"`
+}
+
 // 列表请求字段
 type ListRequest struct {
 	Account  string `json:"account"`

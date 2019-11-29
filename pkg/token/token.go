@@ -33,7 +33,7 @@ func Parse(tokenString string, secret string) (*Context, error) {
 
 	if err != nil {
 		return ctx, err
-	} else if claims, ok := token.Claims.(jwt.StandardClaims); ok && token.Valid {
+	} else if claims, ok := token.Claims.(*jwt.StandardClaims); ok && token.Valid {
 		id, _ := strconv.Atoi(claims.Id)
 		ctx.ID = uint(id)
 		ctx.Account = claims.Audience
@@ -61,10 +61,8 @@ func ParseRequest(c *gin.Context) (*Context, error) {
 	return Parse(t, viper.GetString("jwt_secret"))
 }
 
-func Sign(ctx *gin.Context, c Context, secret string) (tokenString string, err error) {
-	if secret == "" {
-		secret = viper.GetString("jwt_secret")
-	}
+func Sign(c Context) (tokenString string, err error) {
+	secret := viper.GetString("jwt_secret")
 
 	token := jwt.NewWithClaims(jwt.SigningMethodHS256, jwt.StandardClaims{
 		Audience:  c.Account,

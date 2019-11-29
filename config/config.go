@@ -37,7 +37,7 @@ func (c *Config) initConfig() error {
 
 	viper.SetConfigType("yaml")
 	viper.AutomaticEnv()
-	viper.SetEnvPrefix("AUGBLOG")
+	viper.SetEnvPrefix("AUG")
 	replacer := strings.NewReplacer(".", "_")
 	viper.SetEnvKeyReplacer(replacer)
 
