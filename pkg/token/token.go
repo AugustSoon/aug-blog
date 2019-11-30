@@ -29,18 +29,23 @@ func secretFunc(secret string) jwt.Keyfunc {
 func Parse(tokenString string, secret string) (*Context, error) {
 	ctx := &Context{}
 
-	token, err := jwt.Parse(tokenString, secretFunc(secret))
+	token, err := jwt.ParseWithClaims(tokenString, &jwt.StandardClaims{}, secretFunc(secret))
 
 	if err != nil {
 		return ctx, err
-	} else if claims, ok := token.Claims.(*jwt.StandardClaims); ok && token.Valid {
+	}
+
+	claims, ok := token.Claims.(*jwt.StandardClaims)
+
+	if ok && token.Valid {
 		id, _ := strconv.Atoi(claims.Id)
 		ctx.ID = uint(id)
 		ctx.Account = claims.Audience
+
 		return ctx, nil
 	}
 
-	return ctx, err
+	return ctx, errors.New("The token was invalid.")
 }
 
 func ParseRequest(c *gin.Context) (*Context, error) {
@@ -67,7 +72,7 @@ func Sign(c Context) (tokenString string, err error) {
 	token := jwt.NewWithClaims(jwt.SigningMethodHS256, jwt.StandardClaims{
 		Audience:  c.Account,
 		ExpiresAt: time.Now().Unix() + viper.GetInt64("jwt_ttl"),
-		Id:        string(c.ID),
+		Id:        strconv.Itoa(int(c.ID)),
 		IssuedAt:  time.Now().Unix(),
 		Issuer:    "Aug",
 		NotBefore: time.Now().Unix(),

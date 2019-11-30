@@ -10,6 +10,7 @@ require (
 	github.com/go-ole/go-ole v1.2.4 // indirect
 	github.com/go-playground/universal-translator v0.17.0 // indirect
 	github.com/go-playground/validator v9.30.0+incompatible
+	github.com/go-redis/redis v6.15.6+incompatible
 	github.com/jinzhu/gorm v1.9.11
 	github.com/leodido/go-urn v1.2.0 // indirect
 	github.com/lexkong/log v0.0.0-20180607165131-972f9cd951fc

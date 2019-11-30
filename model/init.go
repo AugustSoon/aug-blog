@@ -2,6 +2,8 @@ package model
 
 import (
 	"fmt"
+	"github.com/JumpSama/aug-blog/pkg/constvar"
+	"github.com/go-redis/redis"
 	"github.com/jinzhu/gorm"
 	_ "github.com/jinzhu/gorm/dialects/mysql"
 	"github.com/lexkong/log"
@@ -10,10 +12,13 @@ import (
 )
 
 type Database struct {
-	Self *gorm.DB
+	Self  *gorm.DB
+	Redis *redis.Client
 }
 
 var DB *Database
+
+var keyPrefix string
 
 func openDB(username, password, addr, name, charset, timezone string) *gorm.DB {
 	config := fmt.Sprintf("%s:%s@tcp(%s)/%s?charset=%s&parseTime=%t&loc=%s", username, password, addr, name, charset, true, url.QueryEscape(timezone))
@@ -51,8 +56,43 @@ func GetSelfDB() *gorm.DB {
 	return InitSelfDB()
 }
 
+func InitRedisDB() *redis.Client {
+	redisDB := redis.NewClient(&redis.Options{
+		Addr:     viper.GetString("redis.addr"),
+		Password: viper.GetString("redis.password"),
+		DB:       viper.GetInt("redis.db"),
+	})
+
+	keyPrefix = viper.GetString("name")
+
+	pong, err := redisDB.Ping().Result()
+
+	if err != nil {
+		log.Debugf("%s,%s", pong, err)
+	}
+
+	return redisDB
+}
+
+func GetRedisDB() *redis.Client {
+	return InitRedisDB()
+}
+
+func GetFullKey(key string) string {
+	prefix := keyPrefix
+
+	if prefix == "" {
+		prefix = constvar.DefaultRedisKeyPrefix
+	}
+
+	return prefix + ":" + key
+}
+
 func (db *Database) Init() {
-	DB = &Database{Self: GetSelfDB()}
+	DB = &Database{
+		Self:  GetSelfDB(),
+		Redis: GetRedisDB(),
+	}
 }
 
 func (db *Database) Close() {

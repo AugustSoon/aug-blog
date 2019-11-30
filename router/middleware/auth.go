@@ -18,7 +18,7 @@ func AuthMiddleware() gin.HandlerFunc {
 			return
 		}
 
-		c.Set(constvar.LoginUserIdKey, u.ID)
+		c.Set(constvar.CurrentUserIdKey, u.ID)
 
 		c.Next()
 	}

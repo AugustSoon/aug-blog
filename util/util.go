@@ -25,8 +25,8 @@ func GetReqID(c *gin.Context) string {
 	return ""
 }
 
-func GetLoginUserId(c *gin.Context) uint {
-	v := c.GetInt(constvar.LoginUserIdKey)
+func GetCurrentUserId(c *gin.Context) uint {
+	v := c.GetInt(constvar.CurrentUserIdKey)
 
 	return uint(v)
 }
