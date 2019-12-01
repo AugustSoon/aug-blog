@@ -3,10 +3,10 @@ package model
 import (
 	"fmt"
 	"github.com/JumpSama/aug-blog/pkg/constvar"
+	"github.com/JumpSama/aug-blog/pkg/logger"
 	"github.com/go-redis/redis"
 	"github.com/jinzhu/gorm"
 	_ "github.com/jinzhu/gorm/dialects/mysql"
-	"github.com/lexkong/log"
 	"github.com/spf13/viper"
 	"net/url"
 )
@@ -26,7 +26,7 @@ func openDB(username, password, addr, name, charset, timezone string) *gorm.DB {
 	db, err := gorm.Open("mysql", config)
 
 	if err != nil {
-		log.Errorf(err, "Database connection failed. Database name: %s", name)
+		logger.Logger.Sugar.Errorf("Database connection failed. Database name: %s", name)
 	}
 
 	setupDB(db)
@@ -68,7 +68,7 @@ func InitRedisDB() *redis.Client {
 	pong, err := redisDB.Ping().Result()
 
 	if err != nil {
-		log.Debugf("%s,%s", pong, err)
+		logger.Logger.Sugar.Debugf("Redis connection failed. Ping: %s. Error: %v", pong, err)
 	}
 
 	return redisDB

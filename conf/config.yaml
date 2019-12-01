@@ -7,14 +7,12 @@ gormlog: true
 jwt_ttl: 43200
 jwt_secret: 0ep7Q1nRmShGbgJ6udBkGFRGkj7MHgAe
 log:
-  writers: file,stdout
-  logger_level: DEBUG
-  logger_file: log/augblog.log
-  log_format_text: false
-  rollingPolicy: daily
-  log_rotate_date: 1
-  log_rotate_size: 10
-  log_backup_count: 7
+  level: DEBUG
+  file_name: log/augblog.log
+  max_age: 30
+  max_size: 1
+  max_backup: 7
+  compress: true
 db:
   name: aug_blog
   addr: 127.0.0.1:3306

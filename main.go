@@ -4,9 +4,9 @@ import (
 	"errors"
 	"github.com/JumpSama/aug-blog/config"
 	"github.com/JumpSama/aug-blog/model"
+	"github.com/JumpSama/aug-blog/pkg/logger"
 	"github.com/JumpSama/aug-blog/router"
 	"github.com/gin-gonic/gin"
-	"github.com/lexkong/log"
 	"github.com/spf13/pflag"
 	"github.com/spf13/viper"
 	"net/http"
@@ -26,7 +26,8 @@ func pingServer() error {
 			return nil
 		}
 
-		log.Info("Waiting for the router, retry in 1 second.")
+		logger.Logger.Sugar.Info("Waiting for the router, retry in 1 second.")
+
 		time.Sleep(time.Second)
 	}
 
@@ -45,6 +46,10 @@ func main() {
 	model.DB.Init()
 	defer model.DB.Close()
 
+	// init logger
+	logger.Logger.Init()
+	defer logger.Logger.Close()
+
 	// set gin mode
 	gin.SetMode(viper.GetString("runmode"))
 
@@ -54,14 +59,14 @@ func main() {
 
 	go func() {
 		if err := pingServer(); err != nil {
-			log.Fatal("The router has no response, or it might took too long to start up.", err)
+			logger.Logger.Sugar.Fatalf("The router has no response, or it might took too long to start up. Error: %v", err)
 		}
-		log.Info("The router has been deployed successfully.")
+		logger.Logger.Sugar.Info("The router has been deployed successfully.")
 	}()
 
 	port := viper.GetString("addr")
 
-	log.Infof("Start to listening the incoming requests on http address: %s", port)
+	logger.Logger.Sugar.Infof("Start to listening the incoming requests on http address: %s", port)
 
-	log.Info(http.ListenAndServe(port, g).Error())
+	logger.Logger.Sugar.Info(http.ListenAndServe(port, g).Error())
 }
