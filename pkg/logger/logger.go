@@ -53,7 +53,6 @@ func InitZapWithConfig() *zap.Logger {
 
 	// 构造日志
 	return zap.New(core, caller, development)
-
 }
 
 func getLevel(conf string) zapcore.Level {

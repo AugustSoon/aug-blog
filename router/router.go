@@ -1,7 +1,6 @@
 package router
 
 import (
-	"github.com/JumpSama/aug-blog/handler/sd"
 	"github.com/JumpSama/aug-blog/handler/user"
 	"github.com/JumpSama/aug-blog/router/middleware"
 	"github.com/gin-gonic/gin"
@@ -23,10 +22,10 @@ func Load(g *gin.Engine, mw ...gin.HandlerFunc) *gin.Engine {
 	})
 
 	// 登录
-	g.POST("/login", user.Login)
+	g.POST("/api/login", user.Login)
 
 	// 用户
-	u := g.Group("/v1/user")
+	u := g.Group("/api/user")
 	u.Use(middleware.AuthMiddleware())
 	{
 		u.POST("", user.Create)
@@ -34,15 +33,6 @@ func Load(g *gin.Engine, mw ...gin.HandlerFunc) *gin.Engine {
 		u.GET("/:account", user.Get)
 		u.GET("", user.List)
 		u.PUT("/:id", user.Update)
-	}
-
-	// 服务状态
-	scvd := g.Group("/sd")
-	{
-		scvd.GET("/health", sd.HealthCheck)
-		scvd.GET("/disk", sd.DiskCheck)
-		scvd.GET("/cpu", sd.CPUCheck)
-		scvd.GET("/ram", sd.RAMCheck)
 	}
 
 	return g

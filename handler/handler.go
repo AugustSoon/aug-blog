@@ -23,7 +23,7 @@ func SendResponse(c *gin.Context, err error, data interface{}) {
 	})
 }
 
-// 正确响应
+// 正确无返回响应
 func SendResponseOK(c *gin.Context) {
 	SendResponse(c, nil, nil)
 }

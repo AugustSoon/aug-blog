@@ -20,12 +20,12 @@ func Login(c *gin.Context) {
 	user, err := model.GetUserByAccount(u.Account)
 
 	if err != nil {
-		SendResponse(c, errno.ErrUserNotFound, nil)
+		SendResponse(c, errno.ErrLogin, nil)
 		return
 	}
 
 	if !auth.Compare(user.Password, u.Password) {
-		SendResponse(c, errno.ErrPasswordIncorrect, nil)
+		SendResponse(c, errno.ErrLogin, nil)
 		return
 	}
 
