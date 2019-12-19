@@ -38,7 +38,7 @@ func main() {
 
 	port := viper.GetString("addr")
 
-	logger.Logger.Sugar.Infof("Start to listening the incoming requests on http address: %s", port)
+	logger.Logger.Sugar.Infof("Start to listening the incoming requests on http address: localhost%s", port)
 
 	logger.Logger.Sugar.Info(http.ListenAndServe(port, g).Error())
 }
