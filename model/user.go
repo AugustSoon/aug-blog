@@ -70,6 +70,13 @@ func GetUserByAccount(account string) (*User, error) {
 	return u, d.Error
 }
 
+// 通过id获取用户
+func GetUserById(id uint) (*User, error) {
+	u := &User{}
+	d := DB.Self.First(&u, id)
+	return u, d.Error
+}
+
 // 通过账号(和id)获取用户数量
 func GetUserCountByAccount(account string, id uint) int {
 	count := 0

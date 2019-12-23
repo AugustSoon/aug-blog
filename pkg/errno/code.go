@@ -13,5 +13,6 @@ var (
 	ErrEncrypt      = &Errno{Code: 20101, Message: "密码加密失败"}
 	ErrUserNotFound = &Errno{Code: 20102, Message: "用户不存在"}
 	ErrUserExist    = &Errno{Code: 20103, Message: "用户已经存在"}
-	ErrLogin        = &Errno{Code: 20104, Message: "账号或密码不正确"}
+	ErrLogin        = &Errno{Code: 20104, Message: "账号或密码错误"}
+	ErrUserStatus   = &Errno{Code: 20105, Message: "用户已停用"}
 )

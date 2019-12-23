@@ -24,6 +24,11 @@ func Login(c *gin.Context) {
 		return
 	}
 
+	if !user.Status {
+		SendResponse(c, errno.ErrUserStatus, nil)
+		return
+	}
+
 	if !auth.Compare(user.Password, u.Password) {
 		SendResponse(c, errno.ErrLogin, nil)
 		return
